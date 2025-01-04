@@ -37,15 +37,15 @@
         }
 
         /* Pozycje gwiazdek */
-        .star1 { top: 232px; left: 76px; }   
-        .star2 { top: 232px; left: 224px; }  
-        .star3 { top: 232px; left: 374px; }   
-        .star4 { top: 384px; left: 71px; }   
-        .star5 { top: 384px; left: 220px; }  
-        .star6 { top: 384px; left: 372px; }  
-        .star7 { top: 537px; left: 80px; }   
-        .star8 { top: 537px; left: 225px; }   
-        .star9 { top: 537px; left: 378px; }  
+        .star1 { top: 25%; left: 5%; }   
+        .star2 { top: 25%; left: 16%; }  
+        .star3 { top: 25%; left: 27%; }   
+        .star4 { top: 50%; left: 5%; }   
+        .star5 { top: 50%; left: 16%; }  
+        .star6 { top: 50%; left: 27%; }  
+        .star7 { top: 75%; left: 5%; }   
+        .star8 { top: 75%; left: 16%; }   
+        .star9 { top: 75%; left: 27%; }  
 
         /* Strzałka do cofnięcia */
         #back-arrow {
@@ -64,8 +64,8 @@
         /* Przycisk do obrazka (przeźroczysty, strona 2) */
         #back-button {
             position: absolute;
-            top: 603px;
-            left: 708px;
+            top: 80%;
+            left: 60%;
             width: 60px;
             height: 60px;
             background: rgba(255, 255, 255, 0);
@@ -100,15 +100,7 @@
         /* Responsywność */
         @media screen and (max-width: 1366px) {
             #main-container {
-                transform: scale(0.9);
-                transform-origin: top left;
-            }
-        }
-
-        @media screen and (max-width: 1024px) {
-            #main-container {
-                transform: scale(0.75);
-                transform-origin: top left;
+                padding: 10%;
             }
 
             .star {
@@ -127,10 +119,30 @@
             }
         }
 
+        @media screen and (max-width: 1024px) {
+            #main-container {
+                padding: 15%;
+            }
+
+            .star {
+                width: 45px;
+                height: 45px;
+            }
+
+            #back-arrow {
+                font-size: 20px;
+                padding: 7px;
+            }
+
+            #back-button {
+                width: 45px;
+                height: 45px;
+            }
+        }
+
         @media screen and (max-width: 768px) {
             #main-container {
-                transform: scale(0.6);
-                transform-origin: top left;
+                padding: 20%;
             }
 
             .star {
@@ -139,7 +151,7 @@
             }
 
             #back-arrow {
-                font-size: 20px;
+                font-size: 18px;
                 padding: 6px;
             }
 
@@ -149,11 +161,9 @@
             }
         }
 
-        /* Dla bardzo małych ekranów */
         @media screen and (max-width: 480px) {
             #main-container {
-                transform: scale(0.5);
-                transform-origin: top left;
+                padding: 25%;
             }
 
             .star {
@@ -162,7 +172,7 @@
             }
 
             #back-arrow {
-                font-size: 18px;
+                font-size: 15px;
                 padding: 5px;
             }
 
