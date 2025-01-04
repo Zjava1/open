@@ -19,8 +19,8 @@
 
         /* Główne tło */
         #main-container {
-            width: 100%;
-            height: 100%;
+            width: 1366px;
+            height: 768px;
             background-image: url('Bez nazwy-1_Obszar roboczy 1.png');
             background-size: cover;
             background-position: center;
@@ -37,15 +37,15 @@
         }
 
         /* Pozycje gwiazdek */
-        .star1 { top: 25%; left: 5%; }   
-        .star2 { top: 25%; left: 16%; }  
-        .star3 { top: 25%; left: 27%; }   
-        .star4 { top: 50%; left: 5%; }   
-        .star5 { top: 50%; left: 16%; }  
-        .star6 { top: 50%; left: 27%; }  
-        .star7 { top: 75%; left: 5%; }   
-        .star8 { top: 75%; left: 16%; }   
-        .star9 { top: 75%; left: 27%; }  
+        .star1 { top: 232px; left: 76px; }   
+        .star2 { top: 232px; left: 224px; }  
+        .star3 { top: 232px; left: 374px; }   
+        .star4 { top: 384px; left: 71px; }   
+        .star5 { top: 384px; left: 220px; }  
+        .star6 { top: 384px; left: 372px; }  
+        .star7 { top: 537px; left: 80px; }   
+        .star8 { top: 537px; left: 225px; }   
+        .star9 { top: 537px; left: 378px; }  
 
         /* Strzałka do cofnięcia */
         #back-arrow {
@@ -61,11 +61,11 @@
             z-index: 11;
         }
 
-        /* Przycisk do obrazka (przeźroczysty, strona 2) */
+        /* Przycisk do obrazka (przeźroczysty) */
         #back-button {
             position: absolute;
-            top: 80%;
-            left: 60%;
+            top: 603px;
+            left: 708px;
             width: 60px;
             height: 60px;
             background: rgba(255, 255, 255, 0);
@@ -100,85 +100,22 @@
         /* Responsywność */
         @media screen and (max-width: 1366px) {
             #main-container {
-                padding: 10%;
-            }
-
-            .star {
-                width: 50px;
-                height: 50px;
-            }
-
-            #back-arrow {
-                font-size: 25px;
-                padding: 8px;
-            }
-
-            #back-button {
-                width: 50px;
-                height: 50px;
+                transform: scale(0.9);
+                transform-origin: top left;
             }
         }
 
         @media screen and (max-width: 1024px) {
             #main-container {
-                padding: 15%;
-            }
-
-            .star {
-                width: 45px;
-                height: 45px;
-            }
-
-            #back-arrow {
-                font-size: 20px;
-                padding: 7px;
-            }
-
-            #back-button {
-                width: 45px;
-                height: 45px;
+                transform: scale(0.75);
+                transform-origin: top left;
             }
         }
 
         @media screen and (max-width: 768px) {
             #main-container {
-                padding: 20%;
-            }
-
-            .star {
-                width: 40px;
-                height: 40px;
-            }
-
-            #back-arrow {
-                font-size: 18px;
-                padding: 6px;
-            }
-
-            #back-button {
-                width: 40px;
-                height: 40px;
-            }
-        }
-
-        @media screen and (max-width: 480px) {
-            #main-container {
-                padding: 25%;
-            }
-
-            .star {
-                width: 35px;
-                height: 35px;
-            }
-
-            #back-arrow {
-                font-size: 15px;
-                padding: 5px;
-            }
-
-            #back-button {
-                width: 35px;
-                height: 35px;
+                transform: scale(0.5);
+                transform-origin: top left;
             }
         }
     </style>
