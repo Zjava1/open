@@ -1,208 +1,308 @@
 <!DOCTYPE html>
-<html lang="pl">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Notes of the Love</title>
-    <style>
-        /* Styl ogólny */
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: #400000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            overflow: hidden;
-        }
+  <meta charset="UTF-8">
+  <title>Realistic 3D Gift Box</title>
+  <style>
+    body {
+      margin: 0;
+      background: transparent;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      perspective: 1200px;
+    }
 
-        /* Główne tło */
-        #main-container {
-            width: 1366px;
-            height: 768px;
-            background-image: url('Bez nazwy-1_Obszar roboczy 1.png');
-            background-size: cover;
-            background-position: center;
-            position: relative;
-        }
+    .box-scene {
+      transform: rotateY(-15deg) rotateX(10deg);
+      transform-style: preserve-3d;
+      width: 300px;
+      height: 200px;
+      position: relative;
+    }
 
-        /* Gwiazdki */
-        .star {
-            position: absolute;
-            width: 60px;
-            height: 60px;
-            cursor: pointer;
-            background: rgba(255, 255, 255, 0);
-        }
+    .box-base, .box-lid {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      border-radius: 10px;
+      transform-style: preserve-3d;
+    }
 
-        /* Pozycje gwiazdek */
-        .star1 { top: 232px; left: 76px; }   
-        .star2 { top: 232px; left: 224px; }  
-        .star3 { top: 232px; left: 374px; }   
-        .star4 { top: 384px; left: 71px; }   
-        .star5 { top: 384px; left: 220px; }  
-        .star6 { top: 384px; left: 372px; }  
-        .star7 { top: 537px; left: 80px; }   
-        .star8 { top: 537px; left: 225px; }   
-        .star9 { top: 537px; left: 378px; }  
+    .box-base {
+      background: linear-gradient(145deg, #5a4a42, #3e322c);
+      box-shadow: 0 20px 30px rgba(0,0,0,0.3);
+      z-index: 1;
+    }
 
-        /* Strzałka do cofnięcia */
-        #back-arrow {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            font-size: 30px;
-            cursor: pointer;
-            background: rgba(255, 255, 255, 0.6);
-            border: none;
-            padding: 10px;
-            border-radius: 50%;
-            z-index: 11;
-        }
+    .box-lid {
+      background: linear-gradient(to bottom right, #ffe6eb, #ffc4d0);
+      z-index: 2;
+      cursor: pointer;
+      transition: transform 1s ease-in-out;
+      transform-origin: top center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      font-family: 'Arial', sans-serif;
+      color: #111;
+    }
 
-        /* Przycisk do obrazka (przeźroczysty) */
-        #back-button {
-            position: absolute;
-            top: 603px;
-            left: 708px;
-            width: 60px;
-            height: 60px;
-            background: rgba(255, 255, 255, 0);
-            border: none;
-            cursor: pointer;
-        }
+    .box-lid.open {
+      transform: rotateX(-140deg) translateZ(5px);
+    }
 
-        /* Obrazek (GIF) - strona 2 */
-        #new-image {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            display: none;
-            width: 500px;
-            height: auto;
-            border: 3px solid #fff;
-        }
+    .hearts {
+      color: red;
+      font-size: 20px;
+      margin-bottom: 5px;
+    }
 
-        /* Specjalny GIF - strona 3 */
-        #special-gif {
-            position: absolute;
-            top: calc(50% + 100px); /* Przesunięcie w górę */
-            left: calc(50% + 400px); /* Przesunięcie w prawo */
-            transform: translate(-50%, -50%);
-            width: 300px;
-            height: auto;
-            display: none;
-            z-index: 10;
-        }
+    .title {
+      font-size: 20px;
+      font-weight: bold;
+      margin: 2px 0;
+      text-align: center;
+    }
 
-        /* Responsywność */
-        @media screen and (max-width: 1366px) {
-            #main-container {
-                transform: scale(0.9);
-                transform-origin: top left;
-            }
-        }
+    .subtitle {
+      font-size: 16px;
+      font-style: italic;
+      margin-top: 4px;
+    }
 
-        @media screen and (max-width: 1024px) {
-            #main-container {
-                transform: scale(0.75);
-                transform-origin: top left;
-            }
-        }
+    .cards-container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+      z-index: 3;
+    }
 
-        @media screen and (max-width: 768px) {
-            #main-container {
-                transform: scale(0.5);
-                transform-origin: top left;
-            }
-        }
-    </style>
+    .card {
+      background: #fff;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 10px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+      display: none;
+      font-size: 18px;
+      font-family: 'Arial', sans-serif;
+      color: #333;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .card.show {
+      display: block;
+    }
+
+    .card-button {
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    .card-button button {
+      background-color: #ffc4d0;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .card-button button:hover {
+      background-color: #ff8f9e;
+    }
+
+  </style>
 </head>
 <body>
-    <div id="main-container">
-        <!-- Gwiazdki jako klikalne pola -->
-        <div class="star star1" onclick="changePage(1)"></div>
-        <div class="star star2" onclick="activateStar2Page()"></div>
-        <div class="star star3" onclick="changePage(3)"></div>
-        <div class="star star4" onclick="changePage(4)"></div>
-        <div class="star star5" onclick="changePage(5)"></div>
-        <div class="star star6" onclick="changePage(6)"></div>
-        <div class="star star7" onclick="changePage(7)"></div>
-        <div class="star star8" onclick="changePage(8)"></div>
-        <div class="star star9" onclick="changePage(9)"></div>
-
-        <!-- Strzałka do cofnięcia -->
-        <button id="back-arrow" onclick="goBackToPreviousPage()">&larr;</button>
-
-        <!-- Przycisk do obrazka (przeźroczysty, strona 2) -->
-        <button id="back-button" onclick="showNewImage()"></button>
-
-        <!-- Obrazek (GIF) - strona 2 -->
-        <img id="new-image" src="new_image.gif" alt="Nowy obrazek">
-
-        <!-- Specjalny GIF - strona 3 -->
-        <img id="special-gif" src="special_image.gif" alt="Specjalny obrazek">
+  <div class="box-scene">
+    <div class="box-base"></div>
+    <div class="box-lid" id="lid">
+      <div class="hearts">❤️ ❤️ ❤️</div>
+      <div class="title">99 reasons<br>WHY</div>
+      <div class="subtitle">I love you</div>
+      <div class="hearts">❤️ ❤️ ❤️</div>
     </div>
+    <div class="cards-container" id="cards-container">
+      <!-- Cards will be dynamically inserted here -->
+    </div>
+  </div>
 
-    <script>
-        let previousPage = null; // Przechowuje numer poprzedniej strony
-        let star2Clicked = false; // Flaga dla gwiazdki 2
+  <script>
+    const lid = document.getElementById('lid');
+    const cardsContainer = document.getElementById('cards-container');
+    const reasons = [
+      "You make my world brighter.",
+      "I love the way you laugh.",
+      "You're my greatest support.",
+      "You make me feel special everyy dayyy.",
+      "You're sooo cuteeee.",
+      "You're my safe place.",
+      "You're the best listener.",
+      "You always know how to make me smile.",
+      "You believe in me even when I don't.",
+      "You’re my favorite person to spend time with.",
+      "You make ordinary moments extraordinary.",
+      "You’re my home, no matter where we are.",
+      "Your kindness is inspiring.",
+      "I admire your strength.",
+      "The way you look.",
+      "You always know how to cheer me up.",
+      "I love the way you support my dreams.",
+      "You make me want to be a better person.",
+      "You have the biggest heart.",
+      "I love how thoughtful you are.",
+      "You never fail to make me laugh.",
+      "You make me feel like the luckiest person alive.",
+      "You’re my best friend and my love.",
+      "I’m always excited to see you.",
+      "You make every day brighter.",
+      "Your beautiful eyes.",
+      "You have the most beautiful soul.",
+      "I’m so grateful for your love.",
+      "I;m so happy to have you in my life.",
+      "You’re always there when I need you.",
+      "I love how you make everything fun.",
+      "You make me feel like I belong.",
+      "Your smile is my favorite sight.",
+      "You inspire me to chase my dreams.",
+      "You are my forever person.",
+      "You are the love of my life.",
+      "I love our memories together.",
+      "You’re the most amazing person I know.",
+      "I love how we always understand each other.",
+      "You make my heart skip a beat.",
+      "You’re my happiness in human form.",
+      "I feel complete with you.",
+      "You make life better just by being in it.",
+      "You’re the best part of my day.",
+      "Your love makes everything better.",
+      "You are my soulmate.",
+      "You bring out the best in me.",
+      "You make my world beautiful.",
+      "Your love is my favorite melody.",
+      "I feel at peace with you.",
+      "You’re the reason for my smile.",
+      "I can’t imagine life without you.",
+      "You make me feel loved every single day.",
+      "You make my dreams come true.",
+      "I love how you make me feel important.",
+      "You are my dream come true.",
+      "You’re the best part of me.",
+      "You make everything feel right.",
+      "You bring joy into my life.",
+      "You make every moment unforgettable.",
+      "I love the way you look at me.",
+      "You’re my reason to smile every day.",
+      "You’re my partner in every adventure.",
+      "I love how you brighten up my life.",
+      "You make me feel like the most loved person.",
+      "You are my sunshine on rainy days.",
+      "You’re my everything.",
+      "I’m so lucky to have you.",
+      "Just for being yourself.",
+      "You're the besttt.",
+      "You make life feel complete.",
+      "I love how you always know what I need.",
+      "You’re my forever person.",
+      "You make me laugh even when I feel sad.",
+      "I love your gentle soul.",
+      "You’re the most important person in my life.",
+      "You’re the reason my heart feels full.",
+      "You make every day special.",
+      "I love how we make everything fun together.",
+      "You’re the love of my life, forever.",
+      "You complete me.",
+      "You’re my best friend, my love, my everything.",
+      "I’ll always love you.",
+      "You are the one I’ve been waiting for.",
+      "I’m the luckiest person to have you.",
+      "You’re the one I want to spend my life with.",
+      "I love how we support each other.",
+      "You’re my best decision.",
+      "You’re the most beautiful person I know.",
+      "You’re my favorite part of every day.",
+      "I love the way you look at me.",
+      "You’re my greatest blessing.",
+      "You are my reason for everything.",
+      "You are my heart.",
+      "I love how you make me feel like I’m enough.",
+      "You are my home.",
+      "I’ll always be grateful for you.",
+      "You make me a better person.",
+      "You are everything I’ve ever wanted.",
+      "I love you more than words can say.",
+      "You’re the best part of my life.",
+      "I love our story.",
+      "You make every day better.",
+      "You make me feel cherished.",
+      "You are my forever love.",
+      "I’m thankful for you every day.",
+      "You are my perfect match.",
+      "You bring so much joy into my life.",
+      "I love you more than you’ll ever know.",
+      "You’re my heart’s desire.",
+      "You make my world complete.",
+      "You are everything to me."
+      "I love everything about you."
+    ];
 
-        function changePage(pageNumber) {
-            console.log(`Przejście do strony: ${pageNumber}`);
+    let currentCardIndex = 0;
 
-            const container = document.getElementById('main-container');
-            if (!previousPage) {
-                previousPage = 1; // Ustaw poprzednią stronę na 1, jeśli brak
-            }
+    lid.addEventListener('click', () => {
+      lid.classList.toggle('open');
+      cardsContainer.style.opacity = 1;
+      showCard(currentCardIndex);
+    });
 
-            // Zmień tło na podstawie numeru strony
-            const newImagePath = `page${pageNumber}.png`;
-            container.style.backgroundImage = `url('${newImagePath}')`;
+    function showCard(index) {
+      const card = document.createElement('div');
+      card.classList.add('card');
+      card.classList.add('show');
+      card.innerText = reasons[index];
+      cardsContainer.appendChild(card);
 
-            // Ukryj GIF-y na innych stronach
-            document.getElementById('new-image').style.display = 'none';
-            document.getElementById('special-gif').style.display = 'none';
+      const cardButtons = document.createElement('div');
+      cardButtons.classList.add('card-button');
+      cardButtons.innerHTML = `
+        <button onclick="prevCard()">Back</button>
+        <button onclick="nextCard()">Next</button>
+      `;
+      card.appendChild(cardButtons);
+    }
 
-            // Wyświetl specjalny GIF na stronie 3
-            if (pageNumber === 3) {
-                document.getElementById('special-gif').style.display = 'block';
-            }
+    function nextCard() {
+      if (currentCardIndex < reasons.length - 1) {
+        currentCardIndex++;
+        updateCards();
+      }
+    }
 
-            // Aktualizacja poprzedniej strony
-            previousPage = pageNumber;
-        }
+    function prevCard() {
+      if (currentCardIndex > 0) {
+        currentCardIndex--;
+        updateCards();
+      }
+    }
 
-        function activateStar2Page() {
-            changePage(2);
-            star2Clicked = true;
-            document.getElementById('back-button').style.display = 'block';
-        }
+    function updateCards() {
+      const cards = document.querySelectorAll('.card');
+      cards.forEach(card => card.remove());
+      showCard(currentCardIndex);
+    }
 
-        function showNewImage() {
-            if (star2Clicked) {
-                document.getElementById('new-image').style.display = 'block';
-            } else {
-                alert("Kliknij najpierw gwiazdkę 2, aby uzyskać dostęp do obrazu!");
-            }
-        }
-
-        function goBackToPreviousPage() {
-            if (previousPage && previousPage !== 1) {
-                const temp = previousPage;
-                previousPage = 1; // Przywróć poprzednią stronę na stronę główną po cofnięciu
-                changePage(temp);
-            } else {
-                changePage(1);
-            }
-        }
-
-        // Wyświetl stronę główną na start
-        window.onload = () => {
-            changePage(1);
-        };
-    </script>
+  </script>
 </body>
 </html>
